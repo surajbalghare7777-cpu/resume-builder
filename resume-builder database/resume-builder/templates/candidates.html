@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Candidates Database - Resume Builder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-brand">📄 Resume builder</div>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Builder</a>
+        <a href="/candidates" class="nav-link active">Candidates Database</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <header class="header">
+        <h1>👥 Candidates Database</h1>
+        <p class="subtitle">Search, sort, and manage all saved candidates</p>
+      </header>
+
+      <div class="db-controls">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search by name, email, phone, or location..." />
+          <button class="btn-primary" onclick="searchCandidates()">Search</button>
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="sortBy">Sort By</label>
+            <select id="sortBy" onchange="loadCandidates()">
+              <option value="created_at">Date Added</option>
+              <option value="full_name">Name</option>
+              <option value="email">Email</option>
+              <option value="location">Location</option>
+              <option value="updated_at">Last Updated</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="sortOrder">Order</label>
+            <select id="sortOrder" onchange="loadCandidates()">
+              <option value="desc">Newest First</option>
+              <option value="asc">Oldest First</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="locationFilter">Location</label>
+            <input type="text" id="locationFilter" placeholder="Filter by location" />
+          </div>
+          <div class="filter-group">
+            <label for="skillFilter">Skill</label>
+            <input type="text" id="skillFilter" placeholder="Filter by skill" />
+          </div>
+          <button class="btn-secondary" onclick="applyFilters()">Apply Filters</button>
+          <button class="btn-secondary" onclick="clearFilters()">Clear</button>
+        </div>
+      </div>
+
+      <div class="stats-bar" id="statsBar">
+        <span id="totalCount">Loading...</span>
+      </div>
+
+      <div class="candidates-table-wrapper">
+        <table class="candidates-table" id="candidatesTable">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Location</th>
+              <th>Skills</th>
+              <th>Template</th>
+              <th>Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="candidatesBody">
+            <tr>
+              <td colspan="9" class="loading-cell">Loading candidates...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Candidate Detail Modal -->
+    <div class="modal-overlay" id="candidateModal" style="display:none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Candidate Details</h2>
+          <button class="btn-remove" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal()">Close</button>
+          <button class="btn-primary" id="modalEditBtn" onclick="editCandidate()">Edit in Builder</button>
+          <!--<button class="btn-remove" id="modalDeleteBtn" onclick="deleteCurrentCandidate()">Delete</button> -->
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/candidates.js') }}"></script>
+  </body>
+</html>

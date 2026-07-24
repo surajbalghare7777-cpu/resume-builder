@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume Builder - Create Your Professional Resume</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-brand">📄 Resume Builder</div>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Builder</a>
+        <a href="/candidates" class="nav-link">Candidates Database</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <header class="header">
+        <h1>📄 Resume Builder</h1>
+        <p class="subtitle">Create your professional resume in minutes</p>
+      </header>
+
+      <main class="main-content">
+        <section class="form-section">
+          <div class="form-container">
+            <h2>Your Information</h2>
+
+            <div class="form-group">
+              <h3>Personal Details</h3>
+              <div class="input-row">
+                <div class="input-field">
+                  <label for="fullName">Full Name *</label>
+                  <input type="text" id="fullName" placeholder=" Enter your name" required />
+                </div>
+                <div class="input-field">
+                  <label for="email">Email *</label>
+                  <input type="email" id="email" placeholder="name@example.com" required />
+                </div>
+              </div>
+
+              <div class="input-row">
+                <div class="input-field">
+                  <label for="phone">Phone</label>
+                  <input type="tel" id="phone" placeholder="Phone Number" />
+                </div>
+                <div class="input-field">
+                  <label for="location">Location</label>
+                  <input type="text" id="location" placeholder="India" />
+                </div>
+              </div>
+
+              <div class="input-field">
+                <label for="linkedin">LinkedIn</label>
+                <input type="url" id="linkedin" placeholder="linkedin.com/in/Name" />
+              </div>
+
+              <div class="input-field">
+                <label for="summary">Professional Summary</label>
+                <textarea id="summary" rows="4" placeholder="Brief overview of your professional background..."></textarea>
+              </div>
+
+              <div class="input-field">
+                <label>Passport Size Photo</label>
+                <div class="photo-upload-area" id="photoUploadArea">
+                  <div class="photo-preview" id="photoPreview">
+                    <span class="photo-placeholder">📷 Click or drag to upload</span>
+                  </div>
+                  <input type="file" id="photoInput" accept="image/png,image/jpeg,image/jpg" style="display: none" />
+                  <div class="photo-actions">
+                    <button type="button" class="btn-add" onclick="document.getElementById('photoInput').click()">Upload Photo</button>
+                    <button type="button" class="btn-remove" id="removePhotoBtn" style="display: none" onclick="removePhoto()">Remove</button>
+                  </div>
+                  <p class="photo-hint">PNG, JPG — max 5MB. Will appear on your resume PDF.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="section-header">
+                <h3>Education</h3>
+                <button type="button" class="btn-add" onclick="addEducation()">+ Add Education</button>
+              </div>
+              <div id="educationContainer"></div>
+            </div>
+
+            <div class="form-group">
+              <div class="section-header">
+                <h3>Work Experience</h3>
+                <button type="button" class="btn-add" onclick="addExperience()">+ Add Experience</button>
+              </div>
+              <div id="experienceContainer"></div>
+            </div>
+
+            <div class="form-group">
+              <h3>Skills</h3>
+              <div class="input-field">
+                <label for="skillInput">Add Skills (press Enter)</label>
+                <input type="text" id="skillInput" placeholder="e.g., JavaScript, Python, React" />
+              </div>
+              <div id="skillsContainer" class="skills-tags"></div>
+            </div>
+
+            <div class="form-group">
+              <div class="section-header">
+                <h3>Projects</h3>
+                <button type="button" class="btn-add" onclick="addProject()">+ Add Project</button>
+              </div>
+              <div id="projectsContainer"></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" onclick="clearForm()">Clear All</button>
+              <button type="button" class="btn-secondary" onclick="saveData()">Save Draft</button>
+              <button type="button" class="btn-save-db" onclick="saveToDatabase()">💾 Save to Database</button>
+              <button type="button" class="btn-primary" onclick="generatePDF()">Download PDF</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="preview-section">
+          <div class="preview-container">
+            <div class="preview-header">
+              <h2>Live Preview</h2>
+              <select id="templateSelector" onchange="changeTemplate()">
+                <option value="modern">Modern</option>
+                <option value="classic">Classic</option>
+                <option value="minimal">Minimal</option>
+                <option value="executive">Executive</option>
+                <option value="creative">Creative</option>
+                <option value="professional">Professional</option>
+              </select>
+            </div>
+
+            <div class="resume-preview" id="resumePreview">
+              <div class="preview-personal">
+                <div class="preview-personal-header">
+                  <div class="preview-personal-info">
+                    <h1 id="previewName">Your Name</h1>
+                  </div>
+                  <div class="preview-photo" id="previewPhoto" style="display: none">
+                    <img id="previewPhotoImg" src="" alt="Photo" />
+                  </div>
+                </div>
+                <div class="preview-contact">
+                  <span id="previewEmail"></span>
+                  <span id="previewPhone"></span>
+                  <span id="previewLocation"></span>
+                </div>
+                <div id="previewLinkedin"></div>
+                <p id="previewSummary" class="preview-summary"></p>
+              </div>
+
+              <div class="preview-section-inner" id="previewEducationSection" style="display: none">
+                <h2 class="section-title">Education</h2>
+                <div id="previewEducation"></div>
+              </div>
+
+              <div class="preview-section-inner" id="previewExperienceSection" style="display: none">
+                <h2 class="section-title">Experience</h2>
+                <div id="previewExperience"></div>
+              </div>
+
+              <div class="preview-section-inner" id="previewSkillsSection" style="display: none">
+                <h2 class="section-title">Skills</h2>
+                <div id="previewSkills" class="skills-list"></div>
+              </div>
+
+              <div class="preview-section-inner" id="previewProjectsSection" style="display: none">
+                <h2 class="section-title">Projects</h2>
+                <div id="previewProjects"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </body>
+</html>
